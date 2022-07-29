@@ -1,0 +1,3 @@
+GET http://127.0.0.1:8000/api/user
+content-type: application/json
+Authorization: Bearer 6|eBh5EGolzfjmZmJ9Mmt2YJMmEsRGUquj0WMwN2uE
