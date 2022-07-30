@@ -15,8 +15,9 @@ class CreatePotionsTable extends Migration
     {
         Schema::create('potions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->index();;
+            $table->string('name')->index();
             $table->string('description')->nullable();
+            $table->integer('active')->default(1);
             $table->timestamps();
         });
     }

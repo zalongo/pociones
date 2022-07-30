@@ -15,7 +15,7 @@ class UpdateClientRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,8 @@ class UpdateClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:500', "unique:clients,name,{$this->client->id}"],
+            'name' => ['required', 'string', 'max:500'],
+            'email' => ['required', 'email', 'max:500', "unique:clients,email,{$this->client->id}"],
         ];
     }
 

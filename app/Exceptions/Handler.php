@@ -6,7 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use Exception;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,6 +48,10 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ModelNotFoundException && $request->is('api/*')) {
             return response()->json(['message' => 'No encontrado'], 404);
+        }
+
+        if ($exception instanceof AuthenticationException && $request->is('api/*')) {
+            return response()->json(['message' => 'Acceso Denegado'], 401);
         }
 
         return parent::render($request, $exception);

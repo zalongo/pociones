@@ -17,7 +17,7 @@ class IngredientController extends Controller
      */
     public function index()
     {
-        $ingredient = Ingredient::get();
+        $ingredient = Ingredient::where('active', 1)->get();
         return $this->success($ingredient);
     }
 
@@ -30,6 +30,8 @@ class IngredientController extends Controller
      */
     public function store(StoreIngredientRequest $request)
     {
+        $ingredient = Ingredient::create($request->all());
+
         return $this->success($ingredient, 'Ingrediente creado con éxito.', 201);
     }
 
@@ -53,6 +55,10 @@ class IngredientController extends Controller
      */
     public function update(UpdateIngredientRequest $request, Ingredient $ingredient)
     {
+        $ingredient->fill($request->all());
+        if ($ingredient->isDirty()) {
+            $ingredient->save();
+        }
         return $this->success($ingredient, 'Ingrediente actualizado con éxito.', 201);
     }
 
@@ -64,7 +70,8 @@ class IngredientController extends Controller
      */
     public function destroy(Ingredient $ingredient)
     {
-        $ingredient->delete();
-        return $this->success([], null, 202);
+        $ingredient->active = 0;
+        $ingredient->save();
+        return $this->success([], 'Ingrediente eliminado con éxito.', 202);
     }
 }

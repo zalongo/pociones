@@ -17,7 +17,7 @@ class PotionController extends Controller
      */
     public function index()
     {
-        $potions = Potion::with('ingredients')->get();
+        $potions = Potion::with('ingredients')->where('active', 1)->get();
         return $this->success($potions);
     }
 
@@ -30,6 +30,13 @@ class PotionController extends Controller
      */
     public function store(StorePotionRequest $request)
     {
+        $data = $request->all();
+
+        $potion = Potion::create($data);
+        if (isset($data['ingredients']) && $data['ingredients']) {
+            $potion->ingredients()->sync($data['ingredients']);
+        }
+
         return $this->success($potion, 'Poción creada con éxito.', 201);
     }
 
@@ -41,6 +48,7 @@ class PotionController extends Controller
      */
     public function show(Potion $potion)
     {
+        $potion->load('ingredients');
         return $this->success($potion);
     }
 
@@ -53,6 +61,17 @@ class PotionController extends Controller
      */
     public function update(UpdatePotionRequest $request, Potion $potion)
     {
+        $data = $request->all();
+        $potion->fill($data);
+        if ($potion->isDirty()) {
+            $potion->save();
+        }
+
+        if (isset($data['ingredients']) && $data['ingredients']) {
+            $potion->ingredients()->detach();
+            $potion->ingredients()->sync($data['ingredients']);
+        }
+
         return $this->success($potion, 'Poción actualizada con éxito.', 201);
     }
 
@@ -64,7 +83,8 @@ class PotionController extends Controller
      */
     public function destroy(Potion $potion)
     {
-        $potion->delete();
-        return $this->success([], null, 202);
+        $potion->active = 0;
+        $potion->save();
+        return $this->success([], 'Poción eliminada con éxito.', 202);
     }
 }

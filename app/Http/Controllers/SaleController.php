@@ -6,6 +6,8 @@ use App\Helpers\ApiResponser;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use App\Models\Potion;
+use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
@@ -16,9 +18,21 @@ class SaleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sales = Sale::with('clients', 'potions')->get();
+        // $sales = new Sale;
+        $client_id = $request->has('client_id') ? $request->query('client_id') : null;
+        $potion_id = $request->query('potion_id');
+        $sales = Sale::with('client', 'potion')
+            ->where('active', 1)
+            ->when($client_id, function ($q) use ($client_id) {
+                return $q->where('client_id', $client_id);
+            })
+            ->when($potion_id, function ($q) use ($potion_id) {
+                return $q->where('potion_id', $potion_id);
+            })
+            ->get();
+
         return $this->success($sales);
     }
 
@@ -30,6 +44,27 @@ class SaleController extends Controller
      */
     public function store(StoreSaleRequest $request)
     {
+        $data = $request->all();
+
+        $potion = Potion::with('ingredients')->find($data['potion_id']);
+
+        $data['total'] = 0;
+
+        foreach ($potion->ingredients as $ingredient) {
+            if ($ingredient->stock < $data['quantity']) {
+                return $this->error('No es posible realizar la venta por falta de stock ', 406, $potion);
+            }
+
+            $data['total'] = $data['total'] + (($ingredient->pivot->quantity * $ingredient->price) * $data['quantity']);
+        }
+
+        $sale = Sale::create($data);
+
+        foreach ($potion->ingredients as $ingredient) {
+            $ingredient->stock = $ingredient->stock - $data['quantity'];
+            $ingredient->save();
+        }
+
         return $this->success($sale, 'Venta creada con éxito.', 201);
     }
 
@@ -41,6 +76,7 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
+        $sale->load('client', 'potion');
         return $this->success($sale);
     }
 
@@ -53,6 +89,35 @@ class SaleController extends Controller
      */
     public function update(UpdateSaleRequest $request, Sale $sale)
     {
+
+        $data = $request->all();
+
+        $potion = Potion::with('ingredients')->find($data['potion_id']);
+
+        foreach ($potion->ingredients as $index => $ingredient) {
+            $potion->ingredients[$index]->stock = $ingredient->stock + $sale->quantity;
+        }
+
+        $data['total'] = 0;
+
+        foreach ($potion->ingredients as $ingredient) {
+            if ($ingredient->stock < $data['quantity']) {
+                return $this->error('No es posible actualizar la venta por falta de stock ', 406, $potion);
+            }
+
+            $data['total'] = $data['total'] + (($ingredient->pivot->quantity * $ingredient->price) * $data['quantity']);
+        }
+
+        $sale->fill($data);
+        if ($sale->isDirty()) {
+            $sale->save();
+        }
+
+        foreach ($potion->ingredients as $ingredient) {
+            $ingredient->stock = $ingredient->stock - $data['quantity'];
+            $ingredient->save();
+        }
+
         return $this->success($sale, 'Venta actualizada con éxito.', 201);
     }
 
@@ -64,7 +129,8 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
-        $sale->delete();
-        return $this->success([], null, 202);
+        $sale->active = 0;
+        $sale->save();
+        return $this->success([], 'Venta eliminada con éxito.', 202);
     }
 }

@@ -28,31 +28,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(
     ['middleware' => ['auth:sanctum']],
     function () {
-
-        Route::post('/auth/logout', [AuthController::class, 'logout']);
+        Route::resource('potions', PotionController::class)->except([
+            'create',
+            'edit'
+        ]);
 
         Route::resource('clients', ClientController::class)->except([
             'create',
-            'edit',
-            'destroy'
+            'edit'
         ]);
 
         Route::resource('ingredients', IngredientController::class)->except([
             'create',
-            'edit',
-            'destroy'
+            'edit'
         ]);
 
-        Route::resource('potions', PotionController::class)->except([
-            'create',
-            'edit',
-            'destroy'
-        ]);
 
         Route::resource('sales', SaleController::class)->except([
             'create',
-            'edit',
-            'destroy'
+            'edit'
         ]);
+
+        Route::post('/auth/logout', [AuthController::class, 'logout']);
     }
 );

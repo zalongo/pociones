@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 
+
 class ClientController extends Controller
 {
 
@@ -18,7 +19,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::get();
+        $clients = Client::where('active', 1)->get();
         return $this->success($clients);
     }
 
@@ -30,6 +31,7 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
+        $client = Client::create($request->all());
 
         return $this->success($client, 'Cliente creado con éxito.', 201);
     }
@@ -54,6 +56,10 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
+        $client->fill($request->all());
+        if ($client->isDirty()) {
+            $client->save();
+        }
         return $this->success($client, 'Cliente actualizado con éxito.', 201);
     }
 
@@ -65,7 +71,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        $client->delete();
-        return $this->success([], null, 202);
+        $client->active = 0;
+        $client->save();
+        return $this->success([], 'Cliente eliminado con éxito.', 202);
     }
 }

@@ -15,7 +15,7 @@ class UpdateIngredientRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,6 +27,8 @@ class UpdateIngredientRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:500', "unique:ingredients,name,{$this->ingredient->id}"],
+            'price' => ['required', 'integer'],
+            'stock' => ['required', 'integer'],
             'description' => ['nullable', 'string', 'max:2000'],
         ];
     }

@@ -23,6 +23,9 @@ class CreateSalesTable extends Migration
             $table->foreign('potion_id')->references('id')->on('potions');
 
             $table->integer('quantity');
+            $table->integer('total');
+
+            $table->integer('active')->default(1);
 
             $table->timestamps();
         });

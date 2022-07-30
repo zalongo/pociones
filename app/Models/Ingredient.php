@@ -10,8 +10,16 @@ class Ingredient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'potion_id',
         'name',
         'description',
+        'price',
+        'stock',
     ];
+
+    protected $appends = ['criticalStock'];
+
+    public function getCriticalStockAttribute()
+    {
+        return $this->stock <= 10;
+    }
 }

@@ -12,6 +12,8 @@ class Sale extends Model
     protected $fillable = [
         'client_id',
         'potion_id',
+        'quantity',
+        'total',
         'created_at',
         'updated_at',
     ];
@@ -24,5 +26,15 @@ class Sale extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    /**
+     * Get the potion that owns the Sale
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function potion()
+    {
+        return $this->belongsTo(Potion::class);
     }
 }

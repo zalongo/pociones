@@ -1,0 +1,6 @@
+2022-07-28
+En el primer commit no había considerado el precio ni las cantidades de los ingredientes
+
+2022-07-29
+Se completaron todos los puntos de la tarea. Ahora si se tomaron en cuenta los precios y las cantidades.
+Se agrego adicional el stock de los ingredientes, ademas de filtros de clientes y  pociones en la consulta a la tabla de ventas.

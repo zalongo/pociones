@@ -14,13 +14,14 @@ class Potion extends Model
         'description',
     ];
 
+
     /**
-     * Get all of the ingredients for the Potion
+     * The ingredients that belong to the Potion
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->belongsToMany(Ingredient::class, 'ingredient_potions')->withPivot('quantity')->where('active', 1);
     }
 }

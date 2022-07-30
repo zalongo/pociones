@@ -15,7 +15,7 @@ class StoreSaleRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +26,9 @@ class StoreSaleRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'integer'],
-            'potion_id' => ['required', 'integer'],
+            'client_id' => ['required', 'integer', 'exists:App\Models\Client,id'],
+            'potion_id' => ['required', 'integer', 'exists:App\Models\Potion,id'],
+            'quantity' => ['required', 'integer'],
         ];
     }
 

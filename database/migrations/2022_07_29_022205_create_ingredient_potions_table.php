@@ -22,6 +22,8 @@ class CreateIngredientPotionsTable extends Migration
             $table->unsignedBigInteger('ingredient_id')->index();
             $table->foreign('ingredient_id')->references('id')->on('ingredients');
 
+            $table->float('quantity')->index();
+
             $table->timestamps();
         });
     }

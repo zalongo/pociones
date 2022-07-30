@@ -1,0 +1,8 @@
+PUT http://127.0.0.1:8000/api/clients/5
+content-type: application/json
+Authorization: Bearer 1|seHKCso1kL58rOtWJGACzW3g9iXAaRLuZrncnRv8
+
+{
+	"name": "Guacolda esposa de Lautaro",
+    "email": "guacolda@heyfoodie.cl"
+}
