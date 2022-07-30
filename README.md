@@ -47,7 +47,7 @@ servicios.</p>
 	<dt>Params</dt>
 	<dd>{"email": "user@heyfoodie.cl", "password": "12345678"}</dd>
 	<dt>Return</dt>
-	<dd>token</dd>
+	<dd>Token</dd>
 </dl>
 <hr>
 
@@ -57,7 +57,7 @@ servicios.</p>
 	<dt>Params</dt>
 	<dd>Authorization: Bearer xxxtokenxxx</dd>
 	<dt>Return</dt>
-	<dd>message</dd>
+	<dd>Confirmation Message</dd>
 </dl>
 <hr>
 
