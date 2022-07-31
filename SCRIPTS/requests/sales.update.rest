@@ -1,0 +1,9 @@
+PUT http://127.0.0.1:8000/api/sales/55
+content-type: application/json
+Authorization: Bearer 1|wG0190LSHH4BuHixOOtHQgZkDCje0Knmh7gaNWZA
+
+{
+	"client_id": 5,
+    "potion_id": 4,
+	"quantity": 2
+}

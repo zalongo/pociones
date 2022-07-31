@@ -1,0 +1,3 @@
+GET http://127.0.0.1:8000/api/sales?client_id=1&potion_id=1
+content-type: application/json
+Authorization: Bearer 4|zAUV91g2QUp2O0vKKHsfuJK32dz6pGGhBhSmvAWg

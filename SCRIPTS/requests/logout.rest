@@ -1,0 +1,2 @@
+POST http://127.0.0.1:8000/api/auth/logout
+Authorization: Bearer 1|seHKCso1kL58rOtWJGACzW3g9iXAaRLuZrncnRv8

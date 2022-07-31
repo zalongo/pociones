@@ -1,0 +1,3 @@
+DELETE http://127.0.0.1:8000/api/ingredients/11
+Content-Type: application/json
+Authorization: Bearer 1|seHKCso1kL58rOtWJGACzW3g9iXAaRLuZrncnRv8

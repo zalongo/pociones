@@ -1,0 +1,8 @@
+POST http://127.0.0.1:8000/api/clients
+content-type: application/json
+Authorization: Bearer 1|wG0190LSHH4BuHixOOtHQgZkDCje0Knmh7gaNWZA
+
+{
+	"name": "Guacolda",
+    "email": "guacolda@heyfoodie.cl"
+}

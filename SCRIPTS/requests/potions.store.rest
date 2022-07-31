@@ -1,0 +1,8 @@
+POST http://127.0.0.1:8000/api/potions
+content-type: application/json
+Authorization: Bearer 1|wG0190LSHH4BuHixOOtHQgZkDCje0Knmh7gaNWZA
+
+{
+	"name": "Agua Para Resfrio",
+	"ingredients": [{"ingredient_id": 11,"quantity": 0.3},{"ingredient_id": 12,"quantity": 0.1},{"ingredient_id": 13,"quantity": 0.4}]
+}
