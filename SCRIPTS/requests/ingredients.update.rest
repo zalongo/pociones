@@ -1,6 +1,6 @@
 PUT http://127.0.0.1:8000/api/ingredients/13
 content-type: application/json
-Authorization: Bearer 1|seHKCso1kL58rOtWJGACzW3g9iXAaRLuZrncnRv8
+Authorization: Bearer 1|wG0190LSHH4BuHixOOtHQgZkDCje0Knmh7gaNWZA
 
 {
 	"name": "Limón",

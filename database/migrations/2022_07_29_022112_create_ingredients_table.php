@@ -18,7 +18,7 @@ class CreateIngredientsTable extends Migration
             $table->string('name')->index();
             $table->string('description')->nullable();
             $table->integer('price')->index();
-            $table->integer('stock')->default(0)->index();
+            $table->float('stock')->default(0)->index();
             $table->integer('active')->default(1);
             $table->timestamps();
         });

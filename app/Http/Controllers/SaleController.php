@@ -20,7 +20,6 @@ class SaleController extends Controller
      */
     public function index(Request $request)
     {
-        // $sales = new Sale;
         $client_id = $request->has('client_id') ? $request->query('client_id') : null;
         $potion_id = $request->query('potion_id');
         $sales = Sale::with('client', 'potion')
@@ -51,7 +50,7 @@ class SaleController extends Controller
         $data['total'] = 0;
 
         foreach ($potion->ingredients as $ingredient) {
-            if ($ingredient->stock < $data['quantity']) {
+            if ($ingredient->stock < ($ingredient->pivot->quantity * $data['quantity'])) {
                 return $this->error('No es posible realizar la venta por falta de stock ', 406, $potion);
             }
 
@@ -61,7 +60,7 @@ class SaleController extends Controller
         $sale = Sale::create($data);
 
         foreach ($potion->ingredients as $ingredient) {
-            $ingredient->stock = $ingredient->stock - $data['quantity'];
+            $ingredient->stock = $ingredient->stock - ($ingredient->pivot->quantity * $data['quantity']);
             $ingredient->save();
         }
 
@@ -95,13 +94,19 @@ class SaleController extends Controller
         $potion = Potion::with('ingredients')->find($data['potion_id']);
 
         foreach ($potion->ingredients as $index => $ingredient) {
-            $potion->ingredients[$index]->stock = $ingredient->stock + $sale->quantity;
+            /* print_r([
+                $ingredient->pivot->quantity,
+                $data['quantity'],
+                $ingredient->pivot->quantity * $data['quantity'],
+                $ingredient->stock
+            ]); */
+            $potion->ingredients[$index]->stock = $ingredient->stock + ($sale->quantity * $ingredient->pivot->quantity);
         }
 
         $data['total'] = 0;
 
         foreach ($potion->ingredients as $ingredient) {
-            if ($ingredient->stock < $data['quantity']) {
+            if ($ingredient->stock <  ($ingredient->pivot->quantity * $data['quantity'])) {
                 return $this->error('No es posible actualizar la venta por falta de stock ', 406, $potion);
             }
 
@@ -114,7 +119,8 @@ class SaleController extends Controller
         }
 
         foreach ($potion->ingredients as $ingredient) {
-            $ingredient->stock = $ingredient->stock - $data['quantity'];
+            $ingredient->stock = $ingredient->stock - ($ingredient->pivot->quantity * $data['quantity']);
+            // $ingredient->stock = $ingredient->stock - $ingredient->pivot->quantity;
             $ingredient->save();
         }
 

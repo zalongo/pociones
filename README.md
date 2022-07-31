@@ -36,7 +36,9 @@ servicios.</p>
 
 ## Comentarios
 
-<p>En la carpeta /SCRIPTS se encuentra el archivo posiones.sql el cual permite crear y cargar la data en la base de datos.</p>
+<p>En la carpeta /SCRIPTS se encuentra el archivo posiones.sql el cual permite crear y cargar la data en la base de datos. De todos modos, se puede implementar la base de datos con toda la info cargada mediante migrations y seeders con el comando:<br>
+<code>php artisan migrate --seed</code>
+</p>
 <p>En la carpeta /SCRIPTS/requests se encuentran los archivos que permiten realizar las consultas a los distintos endpoints. Estos archivos funcionan con el plugin "REST Client" por Huachao Mao para VSCode.</p>
 
 ## End Points
